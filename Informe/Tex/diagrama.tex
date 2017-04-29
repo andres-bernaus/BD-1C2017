@@ -1,3 +1,18 @@
 \section{Diagrama Entidad Relaci\'on}
 
 \subsection{Restricciones}
+
+%Las restriccionas estan escritas informalmente. Habria que corregirlas con los nombres de los atributos de cada entidad.
+
+A continuación, describiremos las restricciones que se deben mantener a la hora de generar las distintas entidades y relaciones para así modelar correctamente el problema.
+
+\begin{itemize}
+\item Al asignar un competidor a un equipo se debe chequear que sea del mismo sexo que el resto de sus compañeros de equipo.
+\item Los Coachs que también participan como competidores tienen datos repetidos. Estos datos deben ser consistentes.
+\item Al crear un Ring se deben asignar todos los árbitros que lo dirijan. Ademas se le debe asignar el rol correspondiente a cada uno de los árbitros; y se deberá controlar que no haya mas de un arbitro para los roles de presidente/ arbitro principal. %O como sea que se llamen los roles
+\item Las competencias asociadas directamente a Rings no pueden estar asociadas a llaves.
+\item Las competencias deben estar asociadas a Rings que cumplan la condición de tener árbitros con mayor graduacion.
+\item Los Coachs deben acompanar a participantes de su escuela.
+\item Los competidores cumplen con los requisitos de la modalidad de la competencia a la que participan.
+\item Hay un Coach por cada 5 alumnos inscritos en una escuela.
+\end{itemize}
