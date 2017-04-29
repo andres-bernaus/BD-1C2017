@@ -1,0 +1,57 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc} % para poder usar tildes en archivos UTF-8
+\usepackage[spanish]{babel} % para que comandos como \today den el resultado en castellano
+\usepackage{a4wide} % márgenes un poco más anchos que lo usual
+\usepackage[conEntregas]{caratula}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage[pdftex]{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{Sty/algorithm2e}
+\usepackage[ruled,vlined]{algorithm2e}
+%Esto de abajo es para encabezado y pie de pagina
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{amsfonts}
+\usepackage{verbatim}
+\usepackage{wrapfig}
+\usepackage{multirow} 
+
+\pagestyle{fancy}
+%\fancyhf{} % clear all header and footer fields
+%\fancyfoot[R]{\footnotesize Página \thepage\ de \lastpage\}
+
+\cfoot{\thepage /\pageref{LastPage} }
+
+\begin{document}
+
+\titulo{Trabajo Práctico \#1}
+\subtitulo{Sistema de inscripción Mundial de Irlanda 2017}
+
+\fecha{\today}
+
+\materia{Bases de Datos}
+\grupo{Grupo 7}
+
+% Pongan cuantos integrantes quieran
+\integrante{Abdala Leila}{950/12}{abdalaleila@gmail.com}
+\integrante{Bernaus Andres}{699/10}{andres.bernaus@hotmail.com}
+\integrante{Gonzalez Alejandro}{32/13}{gonzalezalejandro1592@gmail.com}
+\integrante{Romero Lucas}{440/12}{lucasrafael.romero@gmail.com}
+
+\maketitle
+
+\newpage
+\tableofcontents
+
+\newpage
+\input{Tex/introduccion}
+
+\input{Tex/diagrama}
+
+\input{Tex/modeloRelacional}
+
+\input{Tex/conclusion}
+
+\end{document}
