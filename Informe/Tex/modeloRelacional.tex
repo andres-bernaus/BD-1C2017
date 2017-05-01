@@ -4,47 +4,50 @@ Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguien
 
 \begin{itemize}
 
-\item{Escuela(idEscuela,Nombre)
+\item{Escuela(\underline{idEscuela}, Nombre)\\
 PK\=CK\=\{idEscuela\}}
 %Me parece que podriamos sacar la escuela y ponersela como atributo al maestro
 
-\item{Maestro(idMaestro,Apellido,Nombre,Graduacion,idEscuela,Pais,NumPlaca)
-PK\=\{idMaestro\}
-FK\=\{idEscuela\}
+\item{Maestro(\underline{idMaestro}, Apellido, Nombre, Graduacion, \dotuline{idEscuela}, Pais, NumPlaca)\\
+PK\=\{idMaestro\} \\
+FK\=\{idEscuela\} \\
 }
 
-\item{Coach(idCoach,Apellido,Nombre,Graduacion,NroCertificadoITF,Foto,idEscuela,DNI)
-PK\=\{idCoach\}
-FK\=\{DNI\}
+\item{Coach(\underline{idCoach}, Apellido, Nombre, Graduacion, NroCertificadoITF, Foto, \dotuline{idEscuela}, \dotuline{DNI})\\
+PK\=\{idCoach\} \\
+FK\=\{DNI\} \\
 }
 
-\item{Competidor(Apellido,Nombre,DNI,fechaDeNac,Genero,Graduacion,NroCertificadoITF,Peso,Foto,idEscuela,idEquipo)
-PK\=\{DNI\}
+\item{Competidor(Apellido, Nombre, \underline{DNI}, fechaDeNac, Genero, Graduacion, NroCertificadoITF, Peso, Foto, \dotuline{idEscuela}, \dotuline{idEquipo}) \\
+PK\=\{DNI\} \\
 FK\=\{idEscuela,idEquipo\}
 }
-\item{Equipo(idEquipo,Nombre)
-PK\=\{idEquipo\}
+\item{Equipo(\underline{idEquipo},Nombre)\\
+PK\=\{idEquipo\} \\
 }
 
 \item ParticipaEn()
 
-\item{EquipoParticipaEn()}
+\item{EquipoParticipaEn()
+
+}
 
 \item Modalidad()
 
-\item Competencia(idComp,idEquipo1puesto,idEquipo2puesto,idEquipo3puesto)
+\item Competencia(\underline{idComp}, \dotuline{idEquipo1puesto}, \dotuline{idEquipo2puesto}, \dotuline{idEquipo3puesto})
 
-\item CompetenciaPorEquipo(idCompEquipo)
+\item CompetenciaPorEquipo(\underline{idCompEquipo})
 
-\item Llave(idLlave,idRing,idComp,idCompEquipo)
+\item Llave(\underline{idLlave},\dotuline{idRing},\dotuline{idComp},\dotuline{idCompEquipo})
 
 \item LlavePorEquipos()
 
 \item Ring(idRing)
 
-\item Arbitro(idArbitro,Apellido,Nombre,Graduacion,idRol,idRing)
+\item Arbitro(\underline{idArbitro}, Apellido, Nombre, Graduacion, \dotuline{idRol} ,\dotuline{idRing})\\
 
-\item Rol(idRol,Descripcion)
+
+\item Rol(\underline{idRol}, Descripcion)
 
 
 
