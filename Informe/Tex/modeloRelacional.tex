@@ -4,50 +4,49 @@ Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguien
 
 \begin{itemize}
 
-\item{Escuela(\underline{idEscuela}, Nombre)\\
+\item{Escuela(\underline{idEscuela}, nombre,idPais)\\
 PK\=CK\=\{idEscuela\}}
 %Me parece que podriamos sacar la escuela y ponersela como atributo al maestro
 
-\item{Maestro(\underline{idMaestro}, Apellido, Nombre, Graduacion, \dotuline{idEscuela}, Pais, NumPlaca)\\
+\item{Maestro(\underline{idMaestro}, apellido, nombre, graduacion, \dotuline{idEscuela}, numPlaca)\\
 PK\=\{idMaestro\} \\
 FK\=\{idEscuela\} \\
 }
 
-\item{Coach(\underline{idCoach}, Apellido, Nombre, Graduacion, NroCertificadoITF, Foto, \dotuline{idEscuela}, \dotuline{DNI})\\
-PK\=\{idCoach\} \\
+Pais(\underline{idPais}, nombre)
+
+\item{Coach(\underline{nroCertificadoITF}, apellido, nombre, graduacion , idFoto, \dotuline{idEscuela}, \dotuline{DNI})\\
+PK\=\{nroCertificadoITF\} \\
 FK\=\{DNI\} \\
 }
 
-\item{Competidor(Apellido, Nombre, \underline{DNI}, fechaDeNac, Genero, Graduacion, NroCertificadoITF, Peso, Foto, \dotuline{idEscuela}, \dotuline{idEquipo}) \\
-PK\=\{DNI\} \\
+\item{Competidor(\underline{nroCertificadoITF}, apellido, nombre, fechaDeNac, genero, graduacion, dni, peso, idFoto, \dotuline{idEscuela}, \dotuline{idEquipo}) \\
+PK\=\{nroCertificadoITF\} \\
 FK\=\{idEscuela,idEquipo\}
 }
-\item{Equipo(\underline{idEquipo},Nombre)\\
+\item{Equipo(\underline{idEquipo},nombre)\\
 PK\=\{idEquipo\} \\
 }
 
+PodioPorCompetidor(idCompetencia, nroCertificadoITF,posicion)
+%idcompetencia y nroCertificado son PK y FK
+
 \item ParticipaEn()
 
-\item{EquipoParticipaEn()
-
-}
+\item EquipoParticipaEn()
 
 \item Modalidad()
 
-\item Competencia(\underline{idComp}, \dotuline{idEquipo1puesto}, \dotuline{idEquipo2puesto}, \dotuline{idEquipo3puesto})
+\item{GrupoArbitro(\dotuline{idGrupoArbitro}, \dotuline{idCompetencia})\\
+}
 
-\item CompetenciaPorEquipo(\underline{idCompEquipo})
+\item Competencia(\underline{idCompetencia},  \dotuline{idModalidad})
 
-\item Llave(\underline{idLlave},\dotuline{idRing},\dotuline{idComp},\dotuline{idCompEquipo})
+\item Ring(\underline{idRing}, \dotuline{idCompetencia})
 
-\item LlavePorEquipos()
+\item Arbitro(\underline{idArbitro}, apellido, nombre, graduacion, \dotuline{idRol} ,\dotuline{idGrupoArbitro})\\
 
-\item Ring(idRing)
-
-\item Arbitro(\underline{idArbitro}, Apellido, Nombre, Graduacion, \dotuline{idRol} ,\dotuline{idRing})\\
-
-
-\item Rol(\underline{idRol}, Descripcion)
+\item Rol(\underline{idRol}, descripcion)
 
 
 
