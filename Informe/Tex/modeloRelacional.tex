@@ -4,52 +4,75 @@ Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguien
 
 \begin{itemize}
 
-\item{Escuela(\underline{idEscuela}, nombre,idPais)\\
-PK\=CK\=\{idEscuela\}}
-%Me parece que podriamos sacar la escuela y ponersela como atributo al maestro
+\item{Pais(\underline{idPais}, nombre)\\
+PK\=\{idPais\}}
 
-\item{Maestro(\underline{idMaestro}, apellido, nombre, graduacion, \dotuline{idEscuela}, numPlaca)\\
-PK\=\{idMaestro\} \\
+\item{Escuela(\underline{idEscuela}, nombre, \dotuline{idPais})\\
+PK\=CK\=\{idEscuela\}\\
+FK\=\{idPais\}
+}
+
+\item{Maestro(\underline{numPlaca}, apellido, nombre, graduacion, \dotuline{idEscuela})\\
+PK\=\{numPlaca\} \\
 FK\=\{idEscuela\} \\
 }
 
-Pais(\underline{idPais}, nombre)
-
-\item{Coach(\underline{nroCertificadoITF}, apellido, nombre, graduacion , idFoto, \dotuline{idEscuela}, \dotuline{DNI})\\
+\item{Coach(\underline{nroCertificadoITF}, apellido, nombre, graduacion, \dotuline{DNI}, idFoto, \dotuline{idEscuela})\\
 PK\=\{nroCertificadoITF\} \\
-FK\=\{DNI\} \\
+FK\=\{idEscuela,idFoto\} \\
 }
 
-\item{Competidor(\underline{nroCertificadoITF}, apellido, nombre, fechaDeNac, genero, graduacion, dni, peso, idFoto, \dotuline{idEscuela}, \dotuline{idEquipo}) \\
-PK\=\{nroCertificadoITF\} \\
-FK\=\{idEscuela,idEquipo\}
-}
-\item{Equipo(\underline{idEquipo},nombre)\\
+\item{Equipo(\underline{idEquipo}, nombre, generoEquipo)\\
 PK\=\{idEquipo\} \\
 }
 
-PodioPorCompetidor(idCompetencia, nroCertificadoITF,posicion)
-%idcompetencia y nroCertificado son PK y FK
-
-\item ParticipaEn()
-
-\item EquipoParticipaEn()
-
-\item Modalidad()
-
-\item{GrupoArbitro(\dotuline{idGrupoArbitro}, \dotuline{idCompetencia})\\
+\item{Competidor(\underline{nroCertificadoITF}, apellido, nombre, fechaNacimiento, genero, graduacion, \dotuline{idEscuela}, dni, peso, idFoto,  \dotuline{idEquipo}) \\
+PK\=\{nroCertificadoITF\} \\
+FK\=\{idEscuela,idEquipo\}
 }
 
-\item Competencia(\underline{idCompetencia},  \dotuline{idModalidad})
+\item{Modalidad(\underline{idModalidad}, edadMinima, edadMaxima, sexo, pesoMinimo, pesoMaximo, nombreModalidad, graduacion) \\
+PK\=\{idModalidad\}
+}
 
-\item Ring(\underline{idRing}, \dotuline{idCompetencia})
+\item{Competencia(\underline{idCompetencia}, \dotuline{idModalidad})
+PK\=\{idCompetencia\}\\
+FK\=\{idModalidad\}
+}
 
-\item Arbitro(\underline{idArbitro}, apellido, nombre, graduacion, \dotuline{idRol} ,\dotuline{idGrupoArbitro})\\
+\item{Rol(\underline{idRol}, descripcion)
+PK\=CK\=\{idRol\}
+}
 
-\item Rol(\underline{idRol}, descripcion)
+\item{Arbitro(\underline{idArbitro}, apellido, nombre, graduacion, \dotuline{idRol}, idGrupoArbitro)\\
+PK\=\{idArbitro\}\\
+FK\=\{idRol\}
+}
 
+\item{Arbitraron(numeroRing, \underline{idCompetencia}, \underline{idArbitro)}
+PK\= \{(idCompetencia,idArbitro)\}\\
+FK\=\{idCompetencia,idArbitro\}
+}
 
+\item{PodioPorCompetidor(\underline{\dotuline{idCompetencia}}, \underline{\dotuline{nroCertificadoITF}}, posicion)
+PK\= \{(idCompetencia,nroCertificadoITF)\}\\
+FK\=\{idCompetencia,nroCertificadoITF\}
+}
 
+\item{PodioPorEquipo(\underline{\dotuline{idCompetencia}}, \underline{\dotuline{idEquipo}}, posicion)
+PK\= \{(idcompetencia,idEquipo)\}\\
+FK\=\{idCompetencia,idEquipo\}
+}
+
+\item{ParticipaIndividualmente(\underline{\dotuline{idCompetencia}}, \underline{\dotuline{nroCertificadoITFCoach}}, \dotuline{nroCertificadoITFCompetidor})\\
+PK\= \{(idCompetencia,nroCertificadoITFCompetidor)\}\\
+FK\=\{nroCertificadoITFCoach,nroCertificadoITFCompetidor,idCompetencia\}
+}
+
+\item{ParticipaEquipo(\dotuline{idCompetencia}, \dotuline{nroCertificadoITFCoach}, \underline{\dotuline{idEquipo}})\\
+PK\= \{idEquipo\}\\
+FK\=\{nroCertificadoITFCoach,idEquipo,idCompetencia\}
+}
 
 \end{itemize}
 
