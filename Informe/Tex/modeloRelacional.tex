@@ -1,7 +1,7 @@
 \newpage
 \section{Modelo Relacional}
 
-Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguiente paso es comenzar a transformar dicho modelo en un esquema de datos lógico. Para ello utilizamos el Modelo Relacional, en el que cual reduciremos las distintas Entidades, con sus atributos e interrelaciones, a una estructura llamada esquema de relación. Esta estructura estará compuesta por un nombre y una lista de atributos, que se obtendrán a partir de las entidades y sus relaciones.
+Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguiente paso es comenzar a transformar dicho modelo en un esquema de datos lógico. Para ello utilizamos el Modelo Relacional, en el que cual reduciremos las distintas Entidades, con sus atributos e interrelaciones, a una estructura llamada esquema de relación. Esta estructura estará compuesta por un nombre y una lista de atributos, que se obtendrán a partir de las entidades y relaciones vistas en el DER.
 
 \begin{itemize}
 
@@ -82,11 +82,11 @@ FK\=\{nroCertificadoITFCoach,idEquipo,idCompetencia\}
 
 \subsection{Restricciones}
 
-%Las restriccionas estan escritas informalmente. Habria que corregirlas con los nombres de los atributos de cada entidad.
-
 A continuación, describiremos las restricciones que se deben mantener a la hora de generar las distintas entidades y relaciones para así modelar correctamente el problema.
 
 \begin{itemize}
+\item Los campos de idPais de los árbitros y escuelas corresponden a entradas validas en la entidad Pais.
+\item En las relaciones entre las competencias y los Competidores los valores de los nroCertificadoITF de los competidores y coachs deben ser elementos validos de las entidades Competidor y Coach.
 \item Al asignar un competidor a un equipo se debe chequear que sea del mismo sexo que el resto de sus compañeros de equipo y que pertenezcan a la misma escuela.
 \item Los Coachs que también participan como competidores tienen datos repetidos. Estos datos deben ser consistentes.
 \item Al crear una Competencia se deben tener asignados a todos los árbitros necesarios para el desarrollo de la misma. Es decir, se le debe asignar el rol correspondiente a cada uno de los árbitros; y se deberá controlar que no haya mas de un arbitro para los roles de presidente de mesa y arbitro central.

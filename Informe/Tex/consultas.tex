@@ -1,4 +1,5 @@
-\section{Consultas}
+\section{Implementación  de Funcionalidades}
+
 Una vez que terminado el modelo del problema, el siguiente paso fue comenzar a implementar la base de datos. Es decir generar en mySQL las distintas tablas, entradas y consultas necesarias para resolver el problema.\\
 
 A continuación, mostraremos como se implementaron cada uno de los Store Procedures correspondientes a las consultas necesarias para cumplir con los requerimientos del punto 2 del enunciado:\\
@@ -20,7 +21,23 @@ on comp.nroCertificadoITF = t3.nroCertificadoITFCompetidor;
 \item Dado un competidor obtener la lista de categorías donde haya participado y el resultado obtenido.
 
 \item{ \textbf{Medallero por escuela.}\\
+CREATE PROCEDURE `medalleroPorEscuela`()\\
+BEGIN\\
+select E.nombre,\\
+	count(case when PC.posicion = 1 then 1 else NULL end) + count(case when PE.posicion = 1 then 1 else NULL end) as oro, \\
+	count(case when PC.posicion = 2 then 1 else NULL end) + count(case when PE.posicion = 2 then 1 else NULL end) as plata,  \\
+    count(case when PC.posicion = 3 then 1 else NULL end) + count(case when PE.posicion = 3 then 1 else NULL end) as bronce\\
+    from Escuela E\\
+		join Competidor C on C.idEscuela = E.idEscuela\\
+		left join Equipo Q on C.idEquipo = Q.idEquipo\\
+		left join PodioPorCompetidor PC on C.nroCertificadoITF = PC.nroCertificadoITF\\
+		left join podioPorEquipo PE on PE.idEquipo = Q.idEquipo\\
+		
+		group by E.idEscuela\\
+		order by oro desc, plata desc, bronce desc\;\\
+END\\
 }
+
 \item{\textbf{Listado de árbitros por país.}\\
 CREATE PROCEDURE `arbitroPorPais`(in nombrePais varchar(45))\\
 BEGIN\\
