@@ -17,9 +17,9 @@ Obteniendo de momento el siguiente DER:
 
 El siguiente aspecto a modelar es la participación de los alumnos y Coachs en cada competencia. Dado que cada competidor debe estar acompañado por un Coach al momento de competir, decidimos modelarlo como una relación ternaria 1-n-m entre las entidades Coach, Competidor y Competencia respectivamente. Y como se deben tener en cuenta las restricciones de cada tipo de competencia para con sus participantes; se creo también la entidad \textbf{Modalidad}, que tendrá como atributos las distintas restricciones para cada categoría, como por ejemplo edad mínima y máxima, peso, graduación, etc.\\
 
-Para el caso de combates por grupo decidimos crear otra relacion ternaria entre las entidades \textbf{Coach}, \textbf{Equipo}, y \textbf{Competencia}. La entidad Equipo se relacionara a su vez de forma parcial con la entidad Competidores, debido a que no todos los competidores participaran en la modalidad de combate por grupos. Ademas se deberá constatar que todos los integrantes que formen un equipo  sean del mismo sexo, y pertenezcan a la misma escuela.\\
+Para el caso de combates por grupo decidimos crear otra relación ternaria entre las entidades \textbf{Coach}, \textbf{Equipo}, y \textbf{Competencia}. La entidad Equipo se relacionara a su vez de forma parcial con la entidad Competidores, debido a que no todos los competidores participaran en la modalidad de combate por grupos. Ademas se deberá constatar que todos los integrantes que formen un equipo  sean del mismo sexo, y pertenezcan a la misma escuela.\\
 
-Finalmente agregamos dos interrelaciones n a m entre las Competencias y sus competidores (o equipos). Estas relaciones almacenaran los resultados de los participante de cada una de las competencias en las que hayan participadon.\\
+Finalmente agregamos dos interrelaciones n a m entre las Competencias y sus competidores (o equipos). Estas relaciones almacenaran los resultados de los participante de cada una de las competencias en las que hayan participaron.\\
 
 \includegraphics[scale=0.75]{competenciaDiag.jpg}
 

@@ -1,0 +1,35 @@
+\section{Consultas}
+Una vez que terminado el modelo del problema, el siguiente paso fue comenzar a implementar la base de datos. Es decir generar en mySQL las distintas tablas, entradas y consultas necesarias para resolver el problema.\\
+
+A continuación, mostraremos como se implementaron cada uno de los Store Procedures correspondientes a las consultas necesarias para cumplir con los requerimientos del punto 2 del enunciado:\\
+
+\begin{itemize}
+\item{ \textbf{Listado de inscritos en cada categoría.}\\
+
+\item País que obtuvo mayor cantidad de medallas de oro, plata y bronce.
+\item Sabiendo que las medallas de oro van 3 puntos, las de plata 2 y las de bronce 1 punto, se quiere realizar un ranking de puntaje por país y otro por escuela.
+\item Dado un competidor obtener la lista de categorías donde haya participado y el resultado obtenido.
+
+\item{ \textbf{Medallero por escuela.}\\
+
+\item{\textbf{Listado de árbitros por país.}\\
+CREATE PROCEDURE `arbitroPorPais`(in nombrePais varchar(45))\\
+BEGIN\\
+SELECT A.* FROM Arbitro A\\
+	JOIN Pais P on A.idPais = P.idPais\\
+    WHERE nombrePais = P.nombre;\\
+END\\
+}
+\item La lista de todos los árbitros que actuaron como arbitro central en las modalidades de combate.
+
+\item{\textbf{La lista de equipos por país.}\\
+CREATE PROCEDURE `equiposPorPais`(in nombrePais varchar(45))\\
+BEGIN\\
+SELECT E.nombre FROM equipos E\\
+	JOIN Competidor C ON C.idEquipo = E.idEquipo\\
+	JOIN Escuela Esc ON Esc.idEscuela = C.idEscuela\\
+	WHERE nombrePais = Esc.pais\\
+END\\
+}
+\end{itemize}
+
