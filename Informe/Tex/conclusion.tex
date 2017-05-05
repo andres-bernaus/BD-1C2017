@@ -1,4 +1,5 @@
 \section{Conclusión}
 
-Mediante el Diagrama de entidad relación, pudimos identificar los distintos 
+Sobre este trabajo, queremos destacar algunas conclusiones a las que llegamos durante el transcurso del mismo. 
 
+En principio partimos de un DER con mas del doble de entidades que tiene el presentado en este trabajo. Si bien esto quizás simplificaba las consultas, también generaba un aumento exponencial en la cantidad de restricciones, ya para cada entidad que replicaba información debíamos constatar que dicha información replicada estuviera exactamente igual. Esta complejidad añadida no formaba parte del problema original que buscábamos resolver, por lo que optamos por reducir al mínimo la replica de información, a costa de complejizar las consultas a la base de datos. También notamos que esta nueva forma de almacenar la información sin replicamiento, nos permitía mantener y actualizar los datos de manera mas simple, ya que solo debíamos cambiar una sola posición.
