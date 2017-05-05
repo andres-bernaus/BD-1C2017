@@ -1,11 +1,12 @@
+\newpage
 \section{Modelo Relacional}
 
-Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguiente paso es comenzar a transformar dicho modelo en un esquema de datos lógico. Para ello utilizamos el Modelo Relacional, en el que cual reduciremos las distintas Entidades, con sus atributos e interrelaciones, a una estructura llamada esquema de relación. Esta estructura estará compuesta por un nombre, que se obtendra apartir de 
+Una vez obtenido el diseño de la base de datos que deseamos modelar, el siguiente paso es comenzar a transformar dicho modelo en un esquema de datos lógico. Para ello utilizamos el Modelo Relacional, en el que cual reduciremos las distintas Entidades, con sus atributos e interrelaciones, a una estructura llamada esquema de relación. Esta estructura estará compuesta por un nombre y una lista de atributos, que se obtendrán a partir de las entidades y sus relaciones.
 
 \begin{itemize}
 
 \item{Pais(\underline{idPais}, nombre)\\
-PK\=\{idPais\}}
+PK\=CK\=\{idPais\}}
 
 \item{Escuela(\underline{idEscuela}, nombre, \dotuline{idPais})\\
 PK\=CK\=\{idEscuela\}\\
@@ -26,7 +27,7 @@ FK\=\{idEscuela,idFoto\} \\
 PK\=\{idEquipo\} \\
 }
 
-\item{Competidor(\underline{nroCertificadoITF}, apellido, nombre, fechaNacimiento, genero, graduacion, \dotuline{idEscuela}, dni, peso, idFoto,  \dotuline{idEquipo}) \\
+\item{Competidor(\underline{nroCertificadoITF}, apellido, nombre, fechaNacimiento, genero, graduacion, \dotuline{idEscuela}, dni, peso, idFoto, \dotuline{idEquipo}, esTitular) \\
 PK\=\{nroCertificadoITF\} \\
 FK\=\{idEscuela,idEquipo\}
 }
@@ -44,7 +45,7 @@ FK\=\{idModalidad\}
 PK\=CK\=\{idRol\}
 }
 
-\item{Arbitro(\underline{idArbitro}, apellido, nombre, graduacion, \dotuline{idRol}, idGrupoArbitro)\\
+\item{Arbitro(\underline{idArbitro}, apellido, nombre, graduacion, \dotuline{idRol}, \dotuline{idPais}, idGrupoArbitro)\\
 PK\=\{idArbitro\}\\
 FK\=\{idRol\}
 }
@@ -76,3 +77,18 @@ FK\=\{nroCertificadoITFCoach,idEquipo,idCompetencia\}
 
 \end{itemize}
 
+\subsection{Restricciones}
+
+%Las restriccionas estan escritas informalmente. Habria que corregirlas con los nombres de los atributos de cada entidad.
+
+A continuación, describiremos las restricciones que se deben mantener a la hora de generar las distintas entidades y relaciones para así modelar correctamente el problema.
+
+\begin{itemize}
+\item Al asignar un competidor a un equipo se debe chequear que sea del mismo sexo que el resto de sus compañeros de equipo y que pertenezcan a la misma escuela.
+\item Los Coachs que también participan como competidores tienen datos repetidos. Estos datos deben ser consistentes.
+\item Al crear una Competencia se deben tener asignados a todos los arbitros necesarios para el desarrollo de la misma. Es decir, se le debe asignar el rol correspondiente a cada uno de los árbitros; y se deberá controlar que no haya mas de un arbitro para los roles de presidente de mesa y arbitro central.
+\item Los competidores que participan en una competencia deben tener un peso, genero, edad y graduacion consistente con la modalidad de dicha competencia.
+\item Los arbitros tienen la graduación suficiente para dirigir las competencias en las que participan.
+\item Los Coachs deben acompañar a participantes de su escuela.
+\item Hay un Coach por cada 5 alumnos inscritos en una escuela.
+\end{itemize}
