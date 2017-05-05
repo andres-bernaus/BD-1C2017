@@ -38,7 +38,7 @@ FK\=\{idEscuela,idEquipo\}
 PK\=\{idModalidad\}
 }
 
-\item{Competencia(\underline{idCompetencia}, \dashuline{idModalidad})
+\item{Competencia(\underline{idCompetencia}, \dashuline{idModalidad}) \\
 PK\=\{idCompetencia\}\\
 FK\=\{idModalidad\}
 }
@@ -52,17 +52,17 @@ PK\=\{idArbitro\}\\
 FK\=\{idRol\}
 }
 
-\item{Arbitraron(numeroRing, \underline{idCompetencia}, \underline{idArbitro)}
+\item{Arbitraron(\underline{idCompetencia}, \underline{idArbitro)} \\
 PK\= \{(idCompetencia,idArbitro)\}\\
 FK\=\{idCompetencia,idArbitro\}
 }
 
-\item{PodioPorCompetidor(\underline{\dashuline{idCompetencia}}, \underline{\dashuline{nroCertificadoITF}}, posicion)
+\item{PodioPorCompetidor(\underline{\dashuline{idCompetencia}}, \underline{\dashuline{nroCertificadoITF}}, posicion) \\
 PK\= \{(idCompetencia,nroCertificadoITF)\}\\
 FK\=\{idCompetencia,nroCertificadoITF\}
 }
 
-\item{PodioPorEquipo(\underline{\dashuline{idCompetencia}}, \underline{\dashuline{idEquipo}}, posicion)
+\item{PodioPorEquipo(\underline{\dashuline{idCompetencia}}, \underline{\dashuline{idEquipo}}, posicion) \\
 PK\= \{(idcompetencia,idEquipo)\}\\
 FK\=\{idCompetencia,idEquipo\}
 }
