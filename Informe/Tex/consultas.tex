@@ -6,19 +6,77 @@ A continuación, mostraremos como se implementaron cada uno de los Store Procedu
 
 \begin{itemize}
 \item{\textbf{Listado de inscritos en cada categoría.}\\
-select nombre from Competidor comp inner join 
-(select nroCertificadoITFCompetidor 
-from ParticipaIndividualmente p 
-inner join (select idCompetencia from (select idCompetencia, nombreModalidad from Competencia c
-inner join Modalidad m on c.idModalidad = m.idModalidad) t1 where t1.nombreModalidad = 'mod1') t2
-on p.idCompetencia = t2.idCompetencia) t3 
-on comp.nroCertificadoITF = t3.nroCertificadoITFCompetidor;
-
+SELECT nombre FROM Competidor comp INNER JOIN \\
+(SELECT nroCertificadoITFCompetidor \\
+FROM ParticipaIndividualmente p \\
+INNER JOIN (select idCompetencia FROM (select idCompetencia, nombreModalidad FROM Competencia c\\
+INNER JOIN Modalidad m ON c.idModalidad = m.idModalidad) t1 WHERE t1.nombreModalidad = 'mod1') t2\\
+ON p.idCompetencia = t2.idCompetencia) t3 \\
+ON comp.nroCertificadoITF = t3.nroCertificadoITFCompetidor\;\\
 }
 
-\item País que obtuvo mayor cantidad de medallas de oro, plata y bronce.
-\item Sabiendo que las medallas de oro van 3 puntos, las de plata 2 y las de bronce 1 punto, se quiere realizar un ranking de puntaje por país y otro por escuela.
-\item Dado un competidor obtener la lista de categorías donde haya participado y el resultado obtenido.
+\item{\textbf{País que obtuvo mayor cantidad de medallas de oro, plata y bronce.}\\
+SELECT t3.nombre FROM\\
+(SELECT PA.nombre, COUNT(PA.nombre) AS cantMedallas from Pais PA\\
+INNER JOIN (SELECT t1.nroCertificadoITF, E.idPais FROM Escuela E\\
+INNER JOIN (SELECT C.nroCertificadoITF, C.idEscuela\\
+FROM (select nroCertificadoITF from PodioPorCompetidor) P \\
+INNER JOIN Competidor C ON P.nroCertificadoITF = C.nroCertificadoITF) t1\\
+ON t1.idEscuela = E.idEscuela) t2\\
+ON PA.idPais = t2.idPais GROUP BY PA.nombre) t3 ORDER BY t3.cantMedallas DESC\\
+LIMIT 1\;\\
+}
+\item{\textbf{Sabiendo que las medallas de oro van 3 puntos, las de plata 2 y las de bronce 1 punto, se quiere realizar un ranking de puntaje por país y otro por escuela.}
+\item \textbf{Por país:}\\
+CREATE PROCEDURE `rankingPais`()\\
+BEGIN\\
+select P.nombre,\\
+	(count(case when PC.posicion = 1 then 1 else NULL end) + count(case when PE.posicion = 1 then 1 else NULL end)) *3 + \\
+	(count(case when PC.posicion = 2 then 1 else NULL end) + count(case when PE.posicion = 2 then 1 else NULL end)) *2 + \\
+    count(case when PC.posicion = 3 then 1 else NULL end) + count(case when PE.posicion = 3 then 1 else NULL end) as ranking
+    from Pais P\\
+		left join Escuela E on P.idPais = E.idPais\\
+		left join Competidor C on C.idEscuela = E.idEscuela\\
+		left join Equipo Q on C.idEquipo = Q.idEquipo\\
+		left join PodioPorCompetidor PC on C.nroCertificadoITF = PC.nroCertificadoITF\\
+		left join podioPorEquipo PE on PE.idEquipo = Q.idEquipo\\
+		
+		group by P.idPais\\
+		order by ranking desc\;\\
+END\\
+\item \textbf{Por escuela:}\\
+CREATE PROCEDURE `rankingEscuela`()\\
+BEGIN\\
+select E.nombre,\\
+	(count(case when PC.posicion = 1 then 1 else NULL end) + count(case when PE.posicion = 1 then 1 else NULL end)) *3 + \\
+	(count(case when PC.posicion = 2 then 1 else NULL end) + count(case when PE.posicion = 2 then 1 else NULL end)) *2 +\\
+    count(case when PC.posicion = 3 then 1 else NULL end) + count(case when PE.posicion = 3 then 1 else NULL end) as ranking\\
+    from Escuela E\\
+		left join Competidor C on C.idEscuela = E.idEscuela\\
+		left join Equipo Q on C.idEquipo = Q.idEquipo\\
+		left join PodioPorCompetidor PC on C.nroCertificadoITF = PC.nroCertificadoITF\\
+		left join podioPorEquipo PE on PE.idEquipo = Q.idEquipo\\
+		
+		group by E.idEscuela\\
+		order by ranking desc\;\\
+END\\
+}
+
+\newpage
+
+\item{\textbf{Dado un competidor obtener la lista de categorías donde haya participado y el resultado obtenido.}\\
+CREATE PROCEDURE `ParticipacionesPorCompetidor`(in certITF int)\\
+BEGIN\\
+select C.nroCertificadoITF, M.*, PC.posicion from Competidor C\\
+	join ParticipaIndividualmente PI on PI.nroCertificadoITFCompetidor = C.nroCertificadoITF\\
+    join Competencia X on PI.idCompetencia = X.idCompetencia\\
+    join Modalidad M on M.idModalidad = X.idModalidad\\
+    left join PodioPorCompetidor PC on PC.idCompetencia = X.idCompetencia\\
+    
+    where C.nroCertificadoITF = certITF\;\\
+
+END\\
+}
 
 \item{ \textbf{Medallero por escuela.}\\
 CREATE PROCEDURE `medalleroPorEscuela`()\\
