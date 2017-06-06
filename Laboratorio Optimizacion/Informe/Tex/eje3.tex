@@ -1,0 +1,33 @@
+\subsection{Ejercicio 3}\
+
+A continuación ... siguientes consultas:
+\begin{enumerate}[label=(\alph*)]
+\item{SELECT c.\*, m.\* FROM charge c JOIN member m ON c.member\_no $=$ m.member\_no}
+
+\item{SELECT c.\*, m.\* FROM charge c JOIN member m ON c.member\_no $=$ m.member\_no WHERE c.charge\_no $> 99990$}
+
+\item{SELECT c.\*, m.\* FROM charge c JOIN member m ON c.member\_no $=$ m.member\_no WHERE m.member\_no $< 1000$}
+
+\end{enumerate}
+
+\subsubsection{Clustered - mem\_no}
+
+Ejecutamos consultas y obtuvimos los siguientes resultados:
+(esta tabla es copy paste de la anterior)
+\begin{tabular}{| L | L | L | L | L |}
+    \hline
+    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{subArbol estimado} \\ \hline
+    (a) & 0.165347 & 0.011157 & 0.176504 & 0.176504 \\ \hline
+    (b) & 0.165347 & 0.0110785 & 0.176504 & 0.176504 \\ \hline   
+    (c) & 0.165347 & 0.0110785 & 0.176504 & 0.176504 \\ \hline   
+\end{tabular}
+	
+\subsubsection{Non Clustered - mem\_no\_ch (Charge(member\_no))}
+			
+\subsubsection{Sin indices}			
+			
+
+
+\subsubsection{Conclusión}
+
+--EXPLICAR DIFERENCIAS, SI LAS HAY, ENTRE LAS 2--

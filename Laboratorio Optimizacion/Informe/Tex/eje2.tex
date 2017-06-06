@@ -1,0 +1,31 @@
+\subsection{Ejercicio 2}\
+
+A continuación ... siguientes consultas:
+\begin{enumerate}[label=(\alph*)]
+\item{SELECT \* FROM member WHERE region\_no $= 9$ AND $corp\_no = 126$}
+
+\item{ SELECT \* FROM member WHERE region\_no $= 9$ AND $corp\_no = 368$}
+
+\end{enumerate}
+
+\subsubsection{Non Clustered - corp\_no}
+
+Ejecutamos consultas y obtuvimos los siguientes resultados:
+(esta tabla es copy paste de la anterior)
+\begin{tabular}{| L | L | L | L | L |}
+    \hline
+    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{subArbol estimado} \\ \hline
+    (a) & 0.165347 & 0.011157 & 0.176504 & 0.176504 \\ \hline
+    (b) & 0.165347 & 0.0110785 & 0.176504 & 0.176504 \\ \hline   
+\end{tabular}
+	
+\subsubsection{Non Clustered - region\_no}
+			
+\subsubsection{Sin indices}	
+			
+			
+
+
+\subsubsection{Conclusión}
+
+--EXPLICAR DIFERENCIAS, SI LAS HAY, ENTRE LAS 2--
