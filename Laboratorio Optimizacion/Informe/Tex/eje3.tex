@@ -10,10 +10,47 @@ A continuación ... siguientes consultas:
 
 \end{enumerate}
 
+\subsubsection{Sin indices}
+
+Para todas las consultas el motor de la base de datos debió realizar busquedas sobre las tablas member y charge: \\  
+
+El costo de recorrer la tabla member fué: \\ \\
+
+\begin{tabular}{| L | L | L | L | L |}
+    \hline
+    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
+    (a) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline
+    (b) 
+    (c) 
+\end{tabular}
+
+El costo de recorrer la tabla charge fué: \\ \\
+
+\begin{tabular}{| L | L | L | L | L |}
+    \hline
+    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
+    (a) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline
+    (b) 
+    (c) 
+\end{tabular}
+
+El costo de unir las tablas que coinciden mediante Hash match: \\ \\
+
+\begin{tabular}{| L | L | L | L | L |}
+    \hline
+    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
+    (a) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline
+    (b) 
+    (c) 
+\end{tabular}
+
+
+
+
 \subsubsection{Clustered - mem\_no}
 
 Ejecutamos consultas y obtuvimos los siguientes resultados:
-(esta tabla es copy paste de la anterior)
+
 \begin{tabular}{| L | L | L | L | L |}
     \hline
     \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{subArbol estimado} \\ \hline
@@ -24,7 +61,7 @@ Ejecutamos consultas y obtuvimos los siguientes resultados:
 	
 \subsubsection{Non Clustered - mem\_no\_ch (Charge(member\_no))}
 			
-\subsubsection{Sin indices}			
+			
 			
 
 
