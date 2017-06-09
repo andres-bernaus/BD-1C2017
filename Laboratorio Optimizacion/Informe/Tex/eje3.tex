@@ -1,6 +1,7 @@
 \subsection{Ejercicio 3}\
 
-A continuación ... siguientes consultas:
+En este ejercicio debemos ejecutar las siguientes queries:
+
 \begin{enumerate}[label=(\alph*)]
 \item{SELECT c.\*, m.\* FROM charge c JOIN member m ON c.member\_no $=$ m.member\_no}
 
@@ -10,12 +11,48 @@ A continuación ... siguientes consultas:
 
 \end{enumerate}
 
-\subsubsection{Sin indices}
+Lo primero que notamos es que, todas estas consultas deben devolver como resultado todos los campos de las tablas \textbf{member} combinados con todos los campos de la tabla \textbf{charge} que cumplan con la condición del WHERE, es decir, que coincida su member\_no. Esto implica que el motor SQL debe obtener en primer lugar, los datos necesarios de la tabla \textbf{member} y luego unirlos a los datos obtenidos en la tabla \textbf{charge}. \\ \\
 
-Para todas las consultas el motor de la base de datos debió realizar busquedas sobre las tablas member y charge: \\  
+Analizaremos entonces el comportamiento del motor SQL para con los distintos indices al ejecutar las consultas, y luego compararemos resultados entre las mismas. \\
 
-El costo de recorrer la tabla member fué: \\ \\
+\subsubsection{Consulta (a)}
 
+A continuación analizaremos los resultados generados al ejecutar la consulta: sin indices (1), con índice clustered sobre la tabla \textbf{member} y campo member\_no(2); y luego con indice unclustered sobre el campo member\_no de la tabla \textbf{charge}(3). \\ 
+
+\begin{tabular}{| L | L | L | L | L |}
+    \hline
+    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
+    (1) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline %Sin i table scan
+    (2) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline % cluster member(mem_no) clustered index scan
+  (3) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline %TabScan unclustered charge(mem_no)
+\end{tabular}
+
+
+ tabla member 
+  
+ 
+ tabla charge
+    (1) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline % sin I  table scan
+     (2) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline %  cluster member(mem_no) table scan
+      (3) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline %unclustered charge(mem_no)
+ 
+ todas usan table scan Inner Join
+    (1) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline % sin I  table scan
+  (2) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline % cuslter member(mem_no)
+  (3) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline %hash match innerjoin - unclustered charge(mem_no)
+ 
+ Al igual que en ejercicios anteriores podemos ver que, si la consulta requiere obtener una tabla en su totalidad, tener índices no mejora la performance de la consulta.
+ 
+ \subsubsection{Consulta (b)}
+
+
+ 
+ 
+ 
+ 
+ 
+ ---Sin Indices---
+ tabla member
 \begin{tabular}{| L | L | L | L | L |}
     \hline
     \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
@@ -67,22 +104,11 @@ El costo de recorrer la tabla member fué (clustered index scan): \\ \\
     \hline
     \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
     (a) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline
-    (b) & 0.0186806 & 0.0012569 & 0.0199374(3\%) & 0.0199374 \\ \hline
+    (b) & 0.003125 & 0.0001581 & 0.0323391(5\%) & 0.0323391 \\ \hline
     (c) & 0.0186806 & 0.0012569 & 0.0199374(3\%) & 0.0199374 \\ \hline
 \end{tabular}
 
 b y c hacen un sort antes de hacer el merge
-
-El costo de hacer el merger fué (Merge Join): \\ \\
-
-\begin{tabular}{| L | L | L | L | L | L |}
-    \hline
-    \text{Consulta} & Estrategia & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
-    (a) & Hash Match(InnerJoin) & 0 & 1.26964 & 1.26964(63\%) &2.0261  \\ \hline
-    (b) & Nested Loops & 0 & 0.000046 & 0.480459(7\%) & 0.664778 \\ \hline
-    (c) & Merge & 0 & 0.0090905 & 0.0090936(1\%) & 0.68196 \\ \hline
-\end{tabular}
-
 
 
 Para unir los resultados cada consulta uso un metodo distinto:\\ \\
@@ -97,10 +123,7 @@ Para unir los resultados cada consulta uso un metodo distinto:\\ \\
 
 	
 	
-	
-	
-	
-	
+
 \subsubsection{Non Clustered - mem\_no\_ch (Charge(member\_no))}
 Para todas las consultas el motor de la base de datos debió realizar busquedas sobre las tablas member y charge: \\  
 
@@ -109,7 +132,7 @@ El costo de recorrer la tabla member fué: \\ \\
 \begin{tabular}{| L | L | L | L | L |}
     \hline
     \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{Costo subárbol estimado} \\ \hline
-    (a) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline
+    (a) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline %TabScan
     (b) & 0.160903 & 0.011157 & 0.17206(20\%) & 0.17206 \\ \hline
     (c) & 0.160903 & 0.011157 & 0.17206(20\%) & 0.17206 \\ \hline
 \end{tabular}
