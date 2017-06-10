@@ -1,6 +1,14 @@
 \subsection{Ejercicio 1}
 
-A continuación ... siguientes consultas:
+Para el primer consulta, notamos que los indices, tanto cluster como uncluster, no impactan en el tiempo de ejecucion de la primer consulta. Esto es esperable, ya que la consulta  debe traer la tabla completa, por que el uso del indice no tiene sentido, ya que incluso aumentaria el tiempo de ejecucion, por el acceso al indice.
+
+Para la segunda consulta tenemos un esenario similar. Dado que gran parte de la tabla cumple la condicion member_no > 100, de nuevo el uso del indice no impacta notablemente en la performance. Esto es porque la cantidad de registros a traer de memoria es tan grande que predomina en el tiempo de ejecucion.
+
+Para la tercer consulta, pudimos apreciar que usando el indice uncluster teniamos una mejora en el tiempo de ejecucion de un orden de magnitud. En principio nos parecio incorrecto, ya que al buscar por datos mayores a una costante un indice cluster aparenta mas velocidad pues los datos se recorren lineamente. Sin embargo, luego de analizar la creacion de indices notamos que para el caso uncluster, la tabla en que se almacena el indice contiene todos los datos que requerimos en esta consulta, por lo que no necesitamos acceder a la base de datos, y sabemos (por lo explicado en el parrafo anterior) que para esta condicion el tiempo de traer los datos desde la base de datos es por mucho mayor que la ventaja provista por el indice, ya sea cluster o uncluster.
+
+
+
+\begin{comment}
 \begin{enumerate}[label=(\alph*)]
 \item{SELECT \* FROM member}
 
@@ -49,10 +57,10 @@ Ejecutamos consultas y obtuvimos los siguientes resultados:
     (c) & 0.159421 & 0.011047 & 0.170468 & 0.170468 \\ \hline
     (d) & 0.003125 & 0.0001691 & 0.0032941 & 0.0032941 \\ \hline   
 \end{tabular}	
-		
-		
+
 
 
 \subsubsection{Conclusión}
 
 --EXPLICAR DIFERENCIAS, SI LAS HAY, ENTRE LAS 2--
+\end{comment}
