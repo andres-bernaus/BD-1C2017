@@ -1,10 +1,28 @@
 \subsection{Ejercicio 1}
 
-Para el primer consulta, notamos que los indices, tanto cluster como uncluster, no impactan en el tiempo de ejecucion de la primer consulta. Esto es esperable, ya que la consulta  debe traer la tabla completa, por que el uso del indice no tiene sentido, ya que incluso aumentaria el tiempo de ejecucion, por el acceso al indice.
+\subsubsection{SELECT * FROM member}
+Para el primer consulta, notamos que los indices, tanto cluster como uncluster, no impactan en el tiempo de
+ejecucion de la primer consulta. Esto es esperable, ya que la consulta  debe traer la tabla completa,
+por que el uso del indice no tiene sentido. Eso se debe a que aumentaria el tiempo de ejecucion, sumandole el tiempo de  
+acceso al indice.
 
-Para la segunda consulta tenemos un esenario similar. Dado que gran parte de la tabla cumple la condicion member_no > 100, de nuevo el uso del indice no impacta notablemente en la performance. Esto es porque la cantidad de registros a traer de memoria es tan grande que predomina en el tiempo de ejecucion.
+\subsubsection{SELECT * FROM member WHERE member_no > 100}
+Para la segunda consulta tenemos un esenario similar. Dado que gran parte de la tabla cumple la 
+condicion member_no > 100, el uso del indice no impacta notablemente en la performance, dado 
+que la cantidad de registros a traer de memoria es tan grande que predomina en el 
+tiempo de ejecucion.
 
-Para la tercer consulta, pudimos apreciar que usando el indice uncluster teniamos una mejora en el tiempo de ejecucion de un orden de magnitud. En principio nos parecio incorrecto, ya que al buscar por datos mayores a una costante un indice cluster aparenta mas velocidad pues los datos se recorren lineamente. Sin embargo, luego de analizar la creacion de indices notamos que para el caso uncluster, la tabla en que se almacena el indice contiene todos los datos que requerimos en esta consulta, por lo que no necesitamos acceder a la base de datos, y sabemos (por lo explicado en el parrafo anterior) que para esta condicion el tiempo de traer los datos desde la base de datos es por mucho mayor que la ventaja provista por el indice, ya sea cluster o uncluster.
+\subsubsection{SELECT member_no FROM member WHERE member_no > 100}
+Para la tercer consulta, pudimos apreciar que usando el indice uncluster teniamos una mejora 
+en el tiempo de ejecucion de un orden de magnitud. En principio nos parecio incorrecto, ya que
+al buscar por datos mayores a una costante un indice cluster aparenta mas velocidad pues los datos 
+se recorren lineamente. Sin embargo, luego de analizar la creacion de indices notamos que para el caso
+uncluster, la tabla en que se almacena el indice contiene todos los datos que requerimos en esta consulta,
+por lo que no necesitamos acceder a la base de datos, y sabemos (por lo explicado en el parrafo anterior) 
+que para esta condicion el tiempo de traer los datos desde la base de datos es por mucho mayor que la ventaja
+provista por el indice, ya sea cluster o uncluster.
+
+\subsubsection{SELECT * FROM member WHERE member_no > 9990}
 
 
 
