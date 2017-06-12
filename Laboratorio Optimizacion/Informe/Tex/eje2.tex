@@ -1,13 +1,15 @@
 \subsection{Ejercicio 2}\
 
-A continuación ... siguientes consultas:
+Las consultas de este punto son las siguientes:
+
 \begin{enumerate}[label=(\alph*)]
 \item{SELECT \* FROM member WHERE region\_no $= 9$ AND $corp\_no = 126$}
 
-\item{ SELECT \* FROM member WHERE region\_no $= 9$ AND $corp\_no = 368$}
+\item{SELECT \* FROM member WHERE region\_no $= 9$ AND $corp\_no = 368$}
 
 \end{enumerate}
 
+Las probamos usando 2 índices distintos, uno sobre el campo corp\_no y el otro sobre region\_no.
 
 %--La idea aca era que el motor tiene que buscar entradas en la tabla que tenga corp=N y region=9. Las 2 consultas
 %basicamente hacen y necesitan lo mismo. Lo unico interesante son los indices. Para el indice 2, uncluster por region, debe
@@ -19,24 +21,20 @@ A continuación ... siguientes consultas:
 
 
 
-\subsubsection{Non Clustered - corp\_no}
+%\subsubsection{Non Clustered - corp\_no}
 
-Ejecutamos consultas y obtuvimos los siguientes resultados:
-(esta tabla es copy paste de la anterior)
-\begin{tabular}{| L | L | L | L | L |}
-    \hline
-    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{subArbol estimado} \\ \hline
-    (a) & 0.165347 & 0.011157 & 0.176504 & 0.176504 \\ \hline
-    (b) & 0.165347 & 0.0110785 & 0.176504 & 0.176504 \\ \hline   
-\end{tabular}
+%Ejecutamos consultas y obtuvimos los siguientes resultados:
+%(esta tabla es copy paste de la anterior)
+%\begin{tabular}{| L | L | L | L | L |}
+%    \hline
+%    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{subArbol estimado} \\ \hline
+%    (a) & 0.165347 & 0.011157 & 0.176504 & 0.176504 \\ \hline
+%    (b) & 0.165347 & 0.0110785 & 0.176504 & 0.176504 \\ \hline   
+%\end{tabular}
 	
-\subsubsection{Non Clustered - region\_no}
+%\subsubsection{Non Clustered - region\_no}
 			
-\subsubsection{Sin indices}	
+%\subsubsection{Sin indices}	
 			
-			
-
-
 \subsubsection{Conclusión}
 
---EXPLICAR DIFERENCIAS, SI LAS HAY, ENTRE LAS 2--
