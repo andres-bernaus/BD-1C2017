@@ -11,30 +11,53 @@ Las consultas de este punto son las siguientes:
 
 Las probamos usando 2 índices distintos, uno sobre el campo corp\_no y el otro sobre region\_no.
 
-%--La idea aca era que el motor tiene que buscar entradas en la tabla que tenga corp=N y region=9. Las 2 consultas
-%basicamente hacen y necesitan lo mismo. Lo unico interesante son los indices. Para el indice 2, uncluster por region, debe
-%haber muchas filas de la tabla con region=9 por lo que no tiene sentido usar indices para despues tener que acceder a la
-%tabla y corroborar que ademas tenga la corp buscada. ENtonces el motor ignora el indice 2  y directamente barre toda la
-%tabla.
-% Para el indice 1, en cambio, debe haber muchas menos filas con corp=N. Luego el motor decide levantar los indices, buscar
-%aquellos indices que apuntan al N buscado;y una vez que tiene esas filas las filtra para quedarse con las de region=9
+\subsubsection{Non Clustered - corp\_no}
 
+El plan de ejecución consta de un index seek para buscar los registros que cumplan la condición y un RID lookup para levantar las
+filas correspondientes. Se unen los resultados con un nested loop join y se filtran para conseguir los que tengan número de región 9.
+Los siguientes son los costos de esas operaciones. La siguiente tabla corresponde a la consulta a).
 
+\begin{tabular}{| c | c | c | c | c |}
+    \hline
+    \text{Operación} & Costo Entrada/Salida & \text{Costo de CPU} & \text{Costo de Operador Estimado} & \text{Costo de Subarbol Estimado} \\ \hline
+    Index seek & 0.003125 & 0.0001587 & 0.0032837(45\%) & 0.0032837 \\ \hline
+    RID lookup & 0.003125 & 0.0001581 & 0.0040207(55\%) & 0.0040207 \\ \hline
+	Nested Loops & 0 & 0.0000063 & 0.0000063(0\%) & 0.0073106 \\ \hline
+	Filter & 0 & 0.0000007 & 0.0000007(0\%) & 0.0073113 \\ \hline
+\end{tabular}
 
-%\subsubsection{Non Clustered - corp\_no}
+Los siguientes son los valores para la consulta b).
 
-%Ejecutamos consultas y obtuvimos los siguientes resultados:
-%(esta tabla es copy paste de la anterior)
-%\begin{tabular}{| L | L | L | L | L |}
-%    \hline
-%    \text{Consulta} & CE/s & \text{C\_CPU} & \text{Operador Estimado} & \text{subArbol estimado} \\ \hline
-%    (a) & 0.165347 & 0.011157 & 0.176504 & 0.176504 \\ \hline
-%    (b) & 0.165347 & 0.0110785 & 0.176504 & 0.176504 \\ \hline   
-%\end{tabular}
+\begin{tabular}{| c | c | c | c | c |}
+    \hline
+    \text{Operación} & Costo Entrada/Salida & \text{Costo de CPU} & \text{Costo de Operador Estimado} & \text{Costo de Subarbol Estimado} \\ \hline
+    Index seek & 0.003125 & 0.0001702 & 0.0032952(8\%) & 0.0032952 \\ \hline
+    RID lookup & 0.003125 & 0.0001581 & 0.0354802(91\%) & 0.0354802 \\ \hline
+	Nested Loops & 0 & 0.0000502 & 0.0000502(0\%) & 0.0388256 \\ \hline
+	Filter & 0 & 0.0000058 & 0.0000057(0\%) & 0.0388313 \\ \hline
+\end{tabular}
+
 	
-%\subsubsection{Non Clustered - region\_no}
-			
-%\subsubsection{Sin indices}	
-			
+\subsubsection{Non Clustered - region\_no}
+
+El plan de ejecución solo trata de un table scan para ambas consultas, los siguientes son los costos para los 2 scan:
+
+\begin{tabular}{| c | c | c | c | c |}
+    \hline
+    \text{Operación} & Costo Entrada/Salida & \text{Costo de CPU} & \text{Costo de Operador Estimado} & \text{Costo de Subarbol Estimado} \\ \hline
+    (a) & 0.160903 & 0.011157 & 0.17206(100\%) & 0.17206 \\ \hline
+    (b) & 0.160903 & 0.011157 & 0.17206(100\%) & 0.17206 \\ \hline
+\end{tabular}
+
+
 \subsubsection{Conclusión}
 
+La diferencia principal se da en la misma estructura del plan de ejecución. Mientras que las consultas realizadas con el índice sobre
+corp\_no usan index seek para encontrar las filas que cumplan la condición pedida sobre corp\_no; las consultas realizadas con el
+\'indice sobre region\_no, directamente realizaban un table scan sobre la totalidad de la tabla.
+
+La explicación más probable involucra la cantidad de registros que coninciden con las condiciones pedidas. Hay 2 registros con corp\_no
+igual a 126, 12 igual a 368 y hay más de 1100 con region\_no igual a 9. En los resultados del primer índice podemos ver que la parte más
+costosa de la ejecución es el RID lookup. Pasar de 2 a 12 elementos aumentó el costo en un orden de magnitud. Cuando forzamos las consultas
+a utilizar el segundo índice, el costo del lookup era 6 veces más alto que el total original. Probablemente por esta razón, el planificador
+ignora el índice y realiza el scan.
