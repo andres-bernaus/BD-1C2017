@@ -8,6 +8,12 @@ A continuación ... siguientes consultas:
 
 \end{enumerate}
 
+
+%--La idea aca era que el motor tiene que buscar entradas en la tabla que tenga corp=N y region=9. Las 2 consultas basicamente hacen y necesitan lo mismo. Lo unico interesante son los indices. Para el indice 2, uncluster por region, debe haber muchas filas de la tabla con region=9 por lo que no tiene sentido usar indices para despues tener que acceder a la tabla y corroborar que ademas tenga la corp buscada. ENtonces el motor ignora el indice 2  y directamente barre toda la tabla.
+% Para el indice 1, en cambio, debe haber muchas menos filas con corp=N. Luego el motor decide levantar los indices, buscar aquellos indices que apuntan al N buscado;y una vez que tiene esas filas las filtra para quedarse con las de region=9
+
+
+
 \subsubsection{Non Clustered - corp\_no}
 
 Ejecutamos consultas y obtuvimos los siguientes resultados:
