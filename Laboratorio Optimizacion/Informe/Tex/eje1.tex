@@ -7,7 +7,7 @@ por que el uso del indice no tiene sentido. Eso se debe a que aumentaria el tiem
 acceso al indice.
 
 \subsubsection{SELECT * FROM member WHERE member_no > 100}
-Para la segunda consulta tenemos un esenario similar. Dado que gran parte de la tabla cumple la 
+Para la segunda consulta tenemos un escenario similar. Dado que gran parte de la tabla cumple la 
 condicion member_no > 100, el uso del indice no impacta notablemente en la performance, dado 
 que la cantidad de registros a traer de memoria es tan grande que predomina en el 
 tiempo de ejecucion.
@@ -23,7 +23,16 @@ que para esta condicion el tiempo de traer los datos desde la base de datos es p
 provista por el indice, ya sea cluster o uncluster.
 
 \subsubsection{SELECT * FROM member WHERE member_no > 9990}
-
+Para la cuarta consulta, podemos notar un variacion importante en los tiempos de ejecucion.
+Tanto para el indice cluster como para el indice uncluster, en comparacion de la consulta
+sin indice. Esto se debe a que ambos indices, se encuentran relacionados con la condicion 
+de la consulta. Sin embargo, al comparar la consulta con el indice Cluster (llamemosla C), 
+contra la consulta con indice uncluster ( llamemosla UNC), C es performante en comparacion 
+de UNC. Esto se debe a que C, solo requiere hacer una busqueda por el indice. Una vez que 
+llega al valor, solo necesita recorrer los registros siguientes pertinentes ya que estan 
+ordenados. En el caso UNC, la consulta debe buscar cada valor de manera individual, pero al
+ser solo un 0.001\% del total de la tabla, sigue siendo mucho mas performante que realizar 
+un Table Scan.
 
 
 \begin{comment}
