@@ -1,6 +1,8 @@
 \subsection{Ejercicio 4}
 
-A continuación ... siguientes consultas:
+Para este ejercicio contamos con un único índice nonclustered sobre el campo $firstname$. El mismo es utilizado en ambas 
+consultas para obtener las entradas de la tabla cuyo campo $firstname=UVI$. Con la diferencia que en la segunda consulta se 
+utiliza las funciones $rtrim$ y $ltrim$ sobre el campo $firstname$:  
 \begin{enumerate}[label=(\alph*)]
 \item{SELECT \* FROM member WHERE firstname $=$ 'UVI'}
 
@@ -8,9 +10,24 @@ A continuación ... siguientes consultas:
 
 \end{enumerate}
 
+Como ambas consultas son iguales (salvo por la condición del where), las ejecuciones sin indices arrojaron los mismos
+resultados. Lo cual tiene sentido pues, necesariamente, se deberan recorrer la totalidad de la tabla $member$.\\
+
+Analizaremos entonces las diferencias entre el comportamiento del motor de SQL al ejecutar ambas consultas, si utilizamos 
+un índice nonclustered sobre el campo $firstname$.\\ 
+
 \subsubsection{Non Clustered - member(firstname)}
 
-Ejecutamos consultas y obtuvimos los siguientes resultados:
+Al ejecutar la consulta (a) obtuvimos el comportamiento esperado; el motor SQL aprobecho la existencia del indice y cargo 
+aquellos valores que cumplían con la consulta. Obteniendo rápidamente las todas filas necesarias. \\%(?)
+
+La consulta (b) en cambio, no utilizo el índice. Esto se debe a que dicha consulta ejecuta las funciones $ltrim$ y $rtrim$ 
+sobre el campo $firstname$. Es decir que, se deben crear nuevas instancias de los valores del campo, y como resultado 
+el motor no tiene la posibilidad de utilizarlos para agilizar la consulta.\\%chamuyo
+
+Esto se  puede observar en los resultados obtenidos en la ejecucion de cada consulta:
+
+%falta completar la tabla
 
 \begin{tabular}{| L | L | L | L | L |}
     \hline
