@@ -39,7 +39,7 @@ Como esta consulta realiza un natural join entre las tablas $member$ y $charge$ 
  
  \subsubsection{Consulta (c)}
  
- Para esta consulta vemos que en el caso de indice cluster el planificador lo usa para realizar el filtrador de registros ya que el campo sobre el que esta ordenado coincide con el campo que estamos finltrado en la condicion de la consulta. Luego se aplicar un sort sobre la otra tabla para aprovechar el hecho de que la consulkta devuelve los datos ordenados, realizando de este modo un merge Join ya que es menos costozo que los otros tipos de join. mari tenia un borreguito. En el caso uncluster y el caso sin indice obtenemos de nuevo el mismo tiempo y plan de ejecucion. En este caso se ve que el indice uncluster no se puede aplicar para optimizar el filtrado de datos,y tampoco para realizar el join, ya que al ser uncluster se debe considerar el tiempo de acceso a cada registro en memoria individualmente. 
+ Para esta consulta vemos que en el caso de indice cluster el planificador lo usa para realizar el filtrador de registros ya que el campo sobre el que esta ordenado coincide con el campo que estamos finltrado en la condicion de la consulta. Luego se aplicar un sort sobre la otra tabla para aprovechar el hecho de que la consulta devuelve los datos ordenados, realizando de este modo un merge Join ya que es menos costozo que los otros tipos de join. En el caso uncluster y el caso sin indice obtenemos de nuevo el mismo tiempo y plan de ejecucion. En este caso se ve que el indice uncluster no se puede aplicar para optimizar el filtrado de datos,y tampoco para realizar el join, ya que al ser uncluster se debe considerar el tiempo de acceso a cada registro en memoria individualmente. 
  
  ---Sin Indices---
  tabla member
