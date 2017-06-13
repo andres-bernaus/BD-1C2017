@@ -11,7 +11,10 @@ En este ejercicio debemos ejecutar las siguientes queries:
 
 \end{enumerate}
 
-Lo primero que notamos es que, todas estas consultas deben devolver como resultado todos los campos de las tablas \textbf{member} combinados con todos los campos de la tabla \textbf{charge} que cumplan con la condición del WHERE, es decir, que coincida su member\_no. Esto implica que el motor SQL debe obtener en primer lugar, los datos necesarios de la tabla \textbf{member} y luego unirlos a los datos obtenidos en la tabla \textbf{charge}. \\ \\
+Lo primero que notamos es que, todas estas consultas deben devolver como resultado todos los campos de las tablas
+\textbf{member} combinados con todos los campos de la tabla \textbf{charge} que cumplan con la condición del WHERE, es 
+decir, que coincida su member\_no. Esto implica que el motor SQL debe obtener en primer lugar, los datos necesarios de la 
+tabla \textbf{member} y luego unirlos a los datos obtenidos en la tabla \textbf{charge}. \\ \\
 
 Analizaremos entonces el comportamiento del motor SQL para con los distintos indices al ejecutar las consultas, y luego compararemos resultados entre las mismas. \\
 
@@ -27,29 +30,16 @@ A continuación analizaremos los resultados generados al ejecutar la consulta: s
   (3) & 0.160903 & 0.011157 & 0.17206(8\%) & 0.17206 \\ \hline %TabScan unclustered charge(mem_no)
 \end{tabular}
 
-
- tabla member 
-  
- 
- tabla charge
-    (1) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline % sin I  table scan
-     (2) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline %  cluster member(mem_no) table scan
-      (3) & 0.474236 & 0.110157 & 0.584393(29\%) & 0.584393 \\ \hline %unclustered charge(mem_no)
- 
- todas usan table scan Inner Join
-    (1) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline % sin I  table scan
-  (2) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline % cuslter member(mem_no)
-  (3) & 0 & 1.26964 & 1.269647(63\%) & 2.0261 \\ \hline %hash match innerjoin - unclustered charge(mem_no)
- 
- Al igual que en ejercicios anteriores podemos ver que, si la consulta requiere obtener una tabla en su totalidad, tener índices no mejora la performance de la consulta.
+Como esta consulta realiza un natural join entre las tablas $member$ y $charge$ a traves del campo member\_no, y por lo tanto debe ''levantar´´ todos los elementos para verificar si son mapeables a elementos de otra tabla, podemos ver que el motor SQL ignora los indices y directamente realiza un Table Scan.
  
  \subsubsection{Consulta (b)}
-
-
  
+ En este caso podemos apreciar que al tener un indice cluster mejora la performance en dos ordenes de magnitud. Si bien esto no es intuitivo, ya que el indice esta sobre el campo member_no en la tabla member y la condidicion de la consulta se realiza sobre el campo charge\_no para la tabla charge, con un breve analisis del plan de ejecucion podemos apreciar que el indice cluster se usa a la hora de joinnear la tabla member al resultado de filtrar los registros de la tabla charge. 
+ En los otros dos casos, tanto sin indice como trabajando con indice uncluster, obtuvimos el mismo tiempo y plan de ejecucion. Esto es asi por dos motivos. Primero el indice uncluster esta definido sobre el campo member\_no por lo cual no sirve para realizar el filtrado de datos requerido en la condicion de la consulta. Segundo, dado que los registros resultantes de aplicar la condicion de la consulta son 0.0001\% del total de la tabla, no tiene sentido usarlo para realizar el join, ya que es mucho mas performante primero aplicar el filtro manejando de este modo un volumen mucho menor de datos, y esto elimina la posibilidad de usar el indice.
  
+ \subsubsection{Consulta (c)}
  
- 
+ Para esta consulta vemos que en el caso de indice cluster el planificador lo usa para realizar el filtrador de registros ya que el campo sobre el que esta ordenado coincide con el campo que estamos finltrado en la condicion de la consulta. Luego se aplicar un sort sobre la otra tabla para aprovechar el hecho de que la consulkta devuelve los datos ordenados, realizando de este modo un merge Join ya que es menos costozo que los otros tipos de join. mari tenia un borreguito. En el caso uncluster y el caso sin indice obtenemos de nuevo el mismo tiempo y plan de ejecucion. En este caso se ve que el indice uncluster no se puede aplicar para optimizar el filtrado de datos,y tampoco para realizar el join, ya que al ser uncluster se debe considerar el tiempo de acceso a cada registro en memoria individualmente. 
  
  ---Sin Indices---
  tabla member
