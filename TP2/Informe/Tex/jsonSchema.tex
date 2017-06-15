@@ -1,2 +1,233 @@
 \newpage
 \section{Json Schema}
+
+  \begin{verbatim}
+    "Campeonato":{
+    "properties": {
+        "Medallero": {
+            "items": {
+                "properties": {
+                    "idCategoria": {
+                        "type": "integer"
+                    },
+                    "idPrimerCompetidor": {
+                        "type": "integer"
+                    },
+                    "idSegundoCompetidor": {
+                        "type": "integer"
+                    },
+                    "idTercerCompetidor": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "arbitros": {
+        	"items":{
+        		"properties": {
+        			"idArbitro":{
+        				"type": "integer"
+        			}
+        		}
+        	},
+            "type": "array"
+        },
+        "año": {
+            "type": "integer"
+        },
+        "escuelas": {
+            "items": {
+                "properties": {
+                "datos": {
+                    "items": {
+                        "properties": {
+                            "cantEnfrentamientos": {
+                                "type": "integer"
+                            },
+                            "nombreCompetidor": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "nombreEscuela": {
+                    "type": "string"
+                }
+            },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "required":["año","escuelas","arbitros"]
+    },
+    "type": "object"
+}
+\end{verbatim}
+  \begin{verbatim}
+
+
+"Categoria":{
+    "properties": {
+        "Edad": {
+            "properties": {
+                "max": {
+                    "type": "integer"
+                },
+                "min": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "Graduacion": {
+            "type": "integer"
+        },
+        "Modalidad": {
+            "type": "string"
+        },
+        "Peso": {
+            "properties": {
+                "max": {
+                    "type": "integer"
+                },
+                "min": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "idCategoria": {
+            "type": "integer"
+        },
+        "required":["Edad","Graduacion","Modalidad","Peso","idCategoria"]
+    },
+    "type": "object"
+}
+  \end{verbatim}
+  \begin{verbatim}
+
+"Enfrentamiento": {
+    "properties": {
+        "Competidores": {
+            "items": {
+                "type": "integer"
+            },
+            "type": "array"
+        },
+        "Ganador": {
+            "type": "integer"
+        },
+        "idCategoria": {
+            "type": "integer"
+        },
+        "idEnfrentamiento": {
+            "type": "integer"
+        },
+        "required":["Competidores","Ganador","idCategoria","idEnfrentamiento"]
+    },
+    "type": "object"
+}
+  \end{verbatim}
+  \begin{verbatim}  
+"escuela":{
+	"type":"object",
+	"properties":{
+		"nombreMaestro":{"type":"string"},
+		"apellidoMaestro":{"type":"string"},
+		"graduacionMaestro":{"type":"number", "multipleOf": 1.0,"minimum":1,"maximum":6},
+		"nroPlacaInstructor":{"type":"string"},
+		"pais":{"type":"string"},
+		"medallasPorCampeonato":{
+			"type":"object"
+			"properties":{
+				"campeonato":{"type":"integer"},
+				"cantMedallas":{"type":"number", "multipleOf": 1.0,"minimum":0},
+			}
+		},
+		"required":["nombreMaestro","apellidoMaestro","graduacion","nroPlacaInstructor","pais"]
+	}
+}
+  \end{verbatim}
+  \begin{verbatim}
+"arbitro":{
+	"type":"object",
+	"properties":{
+		"nombre":{"type":"string"},
+		"apellido":{"type":"string"},
+		"graduacion":{"type":"number", "multipleOf": 1.0,"minimum":1,"maximum":6},
+		"nroPlaca":{"type":"string"},
+		"pais":{"type":"string"},
+		"participoEn":{
+			"type":"array",
+			"items": {"type":"integer","uniqueItems":true}
+		},
+		"required":["nombre","apellido","graduacion","nroPlaca","pais"]
+	}
+}
+
+  \end{verbatim}
+  \begin{verbatim}
+"competidor":{
+	"type": "object",
+	"properties": {
+		"nombre": {
+			"type": "string"
+		},
+		"apellido": {
+			"type": "string"
+		},
+		"dni": {
+			"type": "string"
+		},
+		"fechaNacimiento": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"genero": {
+			"type": "string",
+			"enum": ["masculino", "femenino"]
+		},
+		"graduacion": {
+			"type": "number",
+			"multipleOf": 1.0,
+			"minimum": 1,
+			"maximum": 6
+		},
+		"nroCertificadoITF": {
+			"type": "string"
+		},
+		"peso": {
+			"type": "number",
+			"multipleOf": 1.0,
+			"minimum": 1
+		},
+		"nombreEscuela": {
+			"type": "string"
+		},
+		"pais": {
+			"type": "string"
+		},
+		"numMedallasCombate": {
+			"type": "integer"
+		},
+		"numMedallasSalto": {
+			"type": "integer"
+		},
+		"numMedallasRotura": {
+			"type": "integer"
+		},
+		"numMedallasFormas": {
+			"type": "integer"
+		},
+		"numMedallasEquipos": {
+			"type": "integer"
+		},
+		"required": ["nombre", "apellido", "graduacion", "dni", "nombreEscuela", "nroCertificadoITF"]
+	}
+}
+
+  \end{verbatim}
