@@ -16,7 +16,8 @@ Una vez seleccionado el campeonato, hicimos un concatMap y un reduce sobre todos
 
 \begin{verbatim}
 
-r.db('TP2').table('Campeonato').filter({anio: 2017})("escuelas").concatMap(function(elem){
+r.db('TP2').table('Campeonato').filter({anio: 2017})("escuelas")
+.concatMap(function(elem){
   	return elem("competidores");
   })
   .reduce(function(left, right){
@@ -44,7 +45,10 @@ function(elem){
 
 \item{\textbf{Para cada escuela, el campeonato donde gan\' m\'as medallas}
 
-De forma similar a la consulta anterior usamos una función $map$. La cual devolverá, $nombreEscuela$ junto con el an\~o del campeonato cuya tupla $(anio,cantidadMedallas)$ asociada sea máxima. Es decir, corresponda al elemento de $medallasPorCampeonato$ con mayor cantidad de medallas.
+De forma similar a la consulta anterior usamos una función $map$. La 
+cual devolverá, $nombreEscuela$ junto con el an\~o del campeonato cuya tupla\\
+ $(anio,cantidadMedallas)$ asociada sea máxima. Es decir, corresponda al 
+ elemento de \\$medallasPorCampeonato$ con mayor cantidad de medallas.
 
 \begin{verbatim}
 
@@ -96,108 +100,63 @@ r.db('TP2').table('Campeonato').map(
 \end{verbatim}
 }
 
-%%%%%%%%%% Puede ser que haya que modificarla, la pongo por las dudas
 
 \item{\textbf{Obtener los competidores que m\'as medallas obtuvieron por modalidad}
 
-En esta consulta usaremos un map reduce. La idea es: en el map tomar a cada competidor y devolver una tupla con los campos $(idCompetidorSalto,maxMedallasSalto,idCompetidorCombate,maxMedallasCombate,...)$ inicializandolos con su respectivo id, y con las cantidades de medallas en cada categoría (las cuales están almacenadas en cada competidor). Luego, en el reduce, comparamos dichos valores y modificamos el idDelCompetidor según sea necesario. En pseudocodigo:
-
-\begin{verbatim}
-map(competidor)
-	return ("1",<dni,numMedallasCombate,dni,numMedallasSalto,
-			dni,numMedallasFormas,dni,numMedallasRotura>)
-			
-reduce(c,[tupla1,tupla2,...])
-	
-	idCompMaxSalto = tupla1.idCompetidorSalto;
-	idCompMaxCombate = tupla1.idCompetidorCombate;
-	 . . . . 
-	idCompMaxRotura = tupla1.idCompetidorRotura;
-	
-	maxMedallasSalto = tupla1.maxMedallasSalto;
-	 . . . .
-	maxMedallasRotura = tupla1.maxMedallasRotura;
-	
-	for all tuplas t in [tupla1,tupla2,...] do
-	   maxMedallasSalto = MAX(maxMedallasSalto,
-								t.maxMedallasSalto);          
-	   if (maxMedallasSalto < t.maxMedallasSalto)
-			idCompMaxSalto = t.idCompetidorSalto;
-	   
-	   . . .
-	   maxMedallasRotura = MAX(maxMedallasRotura,
-								t.maxMedallasRotura);          
-	   
-	endFor						
-	
-	return <c,(idCompMaxSalto,maxMedallasSalto,...,idCompMaxRotura,maxMedallasRotura)>
 
 
-\end{verbatim}
-
-Y la consulta en rethinkDB ser\'ia:\\ \\
+La consulta entonces quedaría:\\ \\
 
 \begin{verbatim}
 
-r.db('TP2').table('Competidor').
-map(function(Comp){
-  return 
-    {"idCompSalto":Comp("dni"),
-      "maxMedallasSalto":Comp("numMedallasSalto"),
-      
-     "idCompCombate":Comp("dni"),
-      "maxMedallasCombate":Comp("numMedallasCombate"),
-     
-      "idCompFormas":Comp("dni"),
-      "maxMedallasFormas":Comp("numMedallasFormas"),
-      
-     "idCompRotura":Comp("dni"),
-      "maxMedallasRotura":Comp("numMedallasRotura"),
-      
-      "idCompEquipos":Comp("dni"),
-      "maxMedallasEquipos":Comp("numMedallasEquipos"),
+r.db('tp2').table("Competidor").filter(
+  function(elem){
+    var maximos = {
+      formas: r.db('tp2').table("Competidor").max("formas")("formas"),
+      salto: r.db('tp2').table("Competidor").max("salto")("salto"),
+      rotura: r.db('tp2').table("Competidor").max("rotura")("rotura"),
+      combate: r.db('tp2').table("Competidor").max("combate")("combate")
       };
-}).
-reduce(function(left, right) {
-  return {
-    idCompSalto:r.branch(left("maxMedallasSalto").ge(right("maxMedallasSalto")),
-      left("idCompSalto"),right("idCompSalto")),
-    maxMedallasSalto:r.branch(left("maxMedallasSalto").ge(right("maxMedallasSalto")),
-      left("maxMedallasSalto"),right("maxMedallasSalto")),
     
-    idCompCombate:r.branch(left("maxMedallasCombate").ge(right("maxMedallasCombate")),
-      left("idCompCombate"),right("idCompCombate")),
-    maxMedallasCombate:r.branch(left("maxMedallasCombate").ge(right("maxMedallasCombate")),
-      left("maxMedallasCombate"),right("maxMedallasCombate")),
+    return elem("salto").eq(maximos["salto"]).or(
+           elem("formas").eq(maximos["formas"]),
+           elem("combate").eq(maximos["combate"]),
+           elem("rotura").eq(maximos["rotura"]))
+}).group(
+  function(elem){
+    var maximos = {
+      formas: r.db('tp2').table("Competidor").max("formas")("formas"),
+      salto: r.db('tp2').table("Competidor").max("salto")("salto"),
+      rotura: r.db('tp2').table("Competidor").max("rotura")("rotura"),
+      combate: r.db('tp2').table("Competidor").max("combate")("combate")
+      };
     
-    idCompFormas:r.branch(left("maxMedallasFormas").ge(right("maxMedallasFormas")),
-      left("idCompFormas"),right("idCompFormas")),
-    maxMedallasFormas:r.branch(left("maxMedallasFormas").ge(right("maxMedallasFormas")),
-      left("maxMedallasFormas"),right("maxMedallasFormas")),
+    return elem("salto").eq(maximos["salto"]).branch(["salto"],[]).add(
+           elem("formas").eq(maximos["formas"]).branch(["formas"],[])).add(
+           elem("combate").eq(maximos["combate"]).branch(["combate"],[])).add(
+           elem("rotura").eq(maximos["rotura"]).branch(["rotura"],[]))
     
-    idCompRotura:r.branch(left("maxMedallasRotura").ge(right("maxMedallasRotura")),
-      left("idCompRotura"),right("idCompRotura")),
-    maxMedallasRotura:r.branch(left("maxMedallasRotura").ge(right("maxMedallasRotura")),
-      left("maxMedallasRotura"),right("maxMedallasRotura")),
-    
-    idCompEquipos:r.branch(left("maxMedallasEquipos").ge(right("maxMedallasEquipos")),
-      left("idCompEquipos"),right("idCompEquipos")),
-    maxMedallasEquipos:r.branch(left("maxMedallasEquipos").ge(right("maxMedallasEquipos")),
-      left("maxMedallasEquipos"),right("maxMedallasEquipos"))
-  }
-}
-    );
+  }, {multi: true})
 
 \end{verbatim}
 }
+
+\item \textbf{El punto 2.8 queda resuelto en la consulta 2.3, la cual esta 
+implementada con map reduce}
 
 \end{itemize}
 
 \subsection{Sharding}
 
-Tomamos la tabla de Competidores, pues es la que tiene mayor cantidad de registros (alrededor de 2000), y creamos 3 shards. Inicialmente la base de datos particion\'o el total de los registros en un shard con 672 registros, el segundo con 621 y el tercero con 561. Luego realizamos inserciones de a 100 competidores y obtuvimos los siguientes resultados: \\ \\
+Tomamos la tabla de Competidores, pues es la que tiene mayor cantidad de 
+registros (alrededor de 2000), y creamos 3 shards. Inicialmente la base 
+de datos particion\'o el total de los registros en un shard con 672 
+registros, el segundo con 621 y el tercero con 561. Luego realizamos 
+inserciones de a 100 competidores y obtuvimos los siguientes resultados: \\ \\
 
 \includegraphics[scale=0.75]{Shards.png}
 
-Como podemos ver en el grafico, rethinkDB distribuye equitativamente las inserciones a todos los shards, de manera de aliviar la carga de la base de datos al momento de responder consultas o realizar operaciones como inserciones.
-
+Como podemos ver en el grafico, rethinkDB distribuye equitativamente las 
+inserciones a todos los shards, de manera de aliviar la carga de la base 
+de datos al momento de responder consultas o realizar operaciones 
+como inserciones.
