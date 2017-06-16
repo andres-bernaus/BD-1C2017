@@ -1,0 +1,99 @@
+#CONSULTA 1
+
+r.db('TP2').table('Campeonato').filter({anio: 2017})("escuelas").concatMap(function(elem){
+  	return elem("competidores");
+  })
+  .reduce(function(left, right){
+    return left.add(right);
+  })
+
+#CONSULTA 2
+
+r.db("TP2").table("Escuela").map(
+function(elem){
+  return {id: elem("idEscuela"),nombre: elem("nombreEscuela"),
+    			cantidad: elem("medallasPorCampeonato").sum("cantidadMedallas")};
+	}
+)
+
+#CONSULTA 3
+
+r.db("TP2").table("Escuela").map(
+  function(elem){
+    var res = elem("medallasPorCampeonato").max("cantidadMedallas");
+    return {id: elem("idEscuela"), anio: res("anio")};
+  })
+#CONSULTA 4
+
+r.db("TP2").table("Arbitro").filter(
+function(elem){
+  return elem("participoEn").count().ge(4);
+})
+
+  
+
+
+#CONSULTA 5
+r.db('TP2').table('Campeonato').map(
+  function(elem){
+
+    var max = elem("escuelas").max(
+      function(esc){
+        return esc("competidores").count();
+      })("competidores").count();
+    
+    return {anio: elem("anio"), escuelas: elem("escuelas").filter(
+      function(val){
+      	return val("competidores").count().eq(max)
+      }).pluck("idEscuela","nombreEscuela")};
+})
+
+#CONSULTA 6
+r.db('TP2').table('Competidor').
+map(function(Comp){
+  return 
+    {"idCompSalto":Comp("dni"),
+      "maxMedallasSalto":Comp("numMedallasSalto"),
+      
+     "idCompCombate":Comp("dni"),
+      "maxMedallasCombate":Comp("numMedallasCombate"),
+     
+      "idCompFormas":Comp("dni"),
+      "maxMedallasFormas":Comp("numMedallasFormas"),
+      
+     "idCompRotura":Comp("dni"),
+      "maxMedallasRotura":Comp("numMedallasRotura"),
+      
+      "idCompEquipos":Comp("dni"),
+      "maxMedallasEquipos":Comp("numMedallasEquipos"),
+      };
+}).
+reduce(function(left, right) {
+  return {
+    idCompSalto:r.branch(left("maxMedallasSalto").ge(right("maxMedallasSalto")),
+      left("idCompSalto"),right("idCompSalto")),
+    maxMedallasSalto:r.branch(left("maxMedallasSalto").ge(right("maxMedallasSalto")),
+      left("maxMedallasSalto"),right("maxMedallasSalto")),
+    
+    idCompCombate:r.branch(left("maxMedallasCombate").ge(right("maxMedallasCombate")),
+      left("idCompCombate"),right("idCompCombate")),
+    maxMedallasCombate:r.branch(left("maxMedallasCombate").ge(right("maxMedallasCombate")),
+      left("maxMedallasCombate"),right("maxMedallasCombate")),
+    
+    idCompFormas:r.branch(left("maxMedallasFormas").ge(right("maxMedallasFormas")),
+      left("idCompFormas"),right("idCompFormas")),
+    maxMedallasFormas:r.branch(left("maxMedallasFormas").ge(right("maxMedallasFormas")),
+      left("maxMedallasFormas"),right("maxMedallasFormas")),
+    
+    idCompRotura:r.branch(left("maxMedallasRotura").ge(right("maxMedallasRotura")),
+      left("idCompRotura"),right("idCompRotura")),
+    maxMedallasRotura:r.branch(left("maxMedallasRotura").ge(right("maxMedallasRotura")),
+      left("maxMedallasRotura"),right("maxMedallasRotura")),
+    
+    idCompEquipos:r.branch(left("maxMedallasEquipos").ge(right("maxMedallasEquipos")),
+      left("idCompEquipos"),right("idCompEquipos")),
+    maxMedallasEquipos:r.branch(left("maxMedallasEquipos").ge(right("maxMedallasEquipos")),
+      left("maxMedallasEquipos"),right("maxMedallasEquipos"))
+  }
+}
+    );
