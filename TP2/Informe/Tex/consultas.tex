@@ -2,4 +2,47 @@
 
 Una vez que terminado el modelo del problema, el siguiente paso fue comenzar a implementar la base de datos. Es decir generar en RethinkDB las distintas tablas, documentos y consultas necesarias para resolver el problema.\\
 
-A continuación, mostraremos como se implementaron cada uno de ellos
+Para ello creamos un pequeño programa que genere de manera aleatoria todos los datos necesarios, asegurándose de ser consistente al momento de crear documentos para los enfrentamientos, campeonatos, escuelas y demás. Ya que, por ejemplo, si un competidor gana un enfrentamiento, el mismo debe ser contabilizado en el Documento $Campeonato$.\\ \\
+
+Una vez llenadas las tablas con los suficientes datos, implementamos cada una de las consultas:\\ \\
+
+\begin{itemize}
+
+\item{\textbf{Cantidad de enfrentamientos ganados por competidor para un campeonato dado.}
+
+Como esta consulta debe realizarse para un Campeonato determinado, el primer paso es filtrar la tabla $Campeonatos$ hasta obtener el documento indicado. Para ello utilizamos la función $filter$ sobre el campo $anio$ que, por lo visto anteriormente, identifica inequívocamente a cada Campeonato.\\
+
+Una vez seleccionado el campeonato, hicimos un concatMap y un reduce sobre todos los pares $(competidor,enfrentamientosGanados)$ de todas las escuelas que participan del campeonato, obteniendo así los datos necesarios para esta consulta.
+
+\begin{verbatim}
+
+r.db('TP2').table('Campeonato').filter({anio: 2017})("escuelas").concatMap(function(elem){
+  	return elem("competidores");
+  })
+  .reduce(function(left, right){
+    return left.add(right);
+  })
+
+\end{verbatim}
+}
+
+\item{\textbf{Cantidad de medallas por nombre de escuela en toda la historia}
+
+Usando la función map, podemos tomar cada documento $Escuela$ y devolver únicamente los campos que nos interesan para resolver la consulta, es decir, su $nombreEscuela$ y la sumatoria de todos los campos $cantidadMedallas$ que se encuentren en el arreglo $medallasPorCampeonato$:
+
+\begin{verbatim}
+
+r.db("TP2").table("Escuela").map(
+function(elem){
+  return {id: elem("idEscuela"),nombre: elem("nombreEscuela"),
+    		cantidadTotal: elem("medallasPorCampeonato").sum("cantidadMedallas")};
+	}
+)
+
+\end{verbatim}
+}
+
+\item{\textbf{para cada escuela, el campeonato donde gan\' m\'as medallas}
+
+
+\end{itemize}

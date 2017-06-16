@@ -1,6 +1,8 @@
 \newpage
 \section{Json Schema}
 
+A partir de las consideraciones del punto anterior tomamos cada Documento y obtuvimos los siguientes Json schemas:
+
   \begin{verbatim}
     "Campeonato":{
     "properties": {
@@ -40,14 +42,14 @@
         "escuelas": {
             "items": {
                 "properties": {
-                "datos": {
+                "competidores": {
                     "items": {
                         "properties": {
                             "cantEnfrentamientos": {
                                 "type": "integer"
                             },
-                            "nombreCompetidor": {
-                                "type": "string"
+                            "idCompetidor": {
+                                "type": "integer"
                             }
                         },
                         "type": "object"
@@ -138,17 +140,23 @@
 	"properties":{
 		"nombreMaestro":{"type":"string"},
 		"apellidoMaestro":{"type":"string"},
+		"idEscuela":{"type":"integer"},
+		"nombreEscuela":{"type":"string"},
 		"graduacionMaestro":{"type":"number", "multipleOf": 1.0,"minimum":1,"maximum":6},
 		"nroPlacaInstructor":{"type":"string"},
 		"pais":{"type":"string"},
 		"medallasPorCampeonato":{
-			"type":"object"
-			"properties":{
-				"campeonato":{"type":"integer"},
-				"cantMedallas":{"type":"number", "multipleOf": 1.0,"minimum":0},
+			"type":"array",
+			"items":{
+				"type":"object"
+				"properties":{
+					"campeonato":{"type":"integer"},
+					"cantidadMedallas":{"type":"number", "multipleOf": 1.0,"minimum":0}
+				}
 			}
 		},
-		"required":["nombreMaestro","apellidoMaestro","graduacion","nroPlacaInstructor","pais"]
+		"required":["nombreMaestro","apellidoMaestro","idEscuela","nombreEscuela",
+		"graduacion","nroPlacaInstructor","pais"]
 	}
 }
   \end{verbatim}
@@ -226,7 +234,8 @@
 		"numMedallasEquipos": {
 			"type": "integer"
 		},
-		"required": ["nombre", "apellido", "graduacion", "dni", "nombreEscuela", "nroCertificadoITF"]
+		"required": ["nombre", "apellido", "graduacion", 
+		"dni", "nombreEscuela", "nroCertificadoITF"]
 	}
 }
 
