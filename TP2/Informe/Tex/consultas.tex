@@ -103,13 +103,7 @@ r.db('TP2').table('Campeonato').map(
 
 \item{\textbf{Obtener los competidores que m\'as medallas obtuvieron por modalidad}
 
-En esta consulta usaremos un map reduce. La idea es: en el map tomar a 
-cada competidor y devolver una tupla con los campos 
-\\$(idCompetidorSalto,maxMedallasSalto,idCompetidorCombate,maxMedallasCombate,...)$
- inicializandolos con su respectivo id, y con las cantidades de medallas 
- en cada categoría (las cuales están almacenadas en cada competidor). 
-Luego, en el reduce, comparamos dichos valores y modificamos el idDelCompetidor
- según sea necesario.
+
 
 La consulta entonces quedaría:\\ \\
 
@@ -146,6 +140,9 @@ r.db('tp2').table("Competidor").filter(
 
 \end{verbatim}
 }
+
+\item \textbf{El punto 2.8 queda resuelto en la consulta 2.3, la cual esta 
+implementada con map reduce}
 
 \end{itemize}
 
