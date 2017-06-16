@@ -103,41 +103,42 @@ r.db('TP2').table('Campeonato').map(
 
 \item{\textbf{Obtener los competidores que m\'as medallas obtuvieron por modalidad}
 
-Para resolver esta consulta, calculamos primero la maxima cantiada de 
-medallas por cada modalidad, y luego filtramos todos los competidores que 
-cumplan con dicha cantidad de medallas
+Para resolver esta consulta, calculamos primero la maxima cantidad de 
+medallas por cada modalidad, y luego nos quedamos con aquellos competidores
+ que cumplan con dicha cantidad de medallas para alguna categoria. Una vez 
+ hecho esto, los agrupamos por modalidad. 
 
 
 La consulta entonces quedaría:\\ \\
 
 \begin{verbatim}
 
-r.db('tp2').table("Competidor").filter(
+r.db('TP2').table("Competidor").filter(
   function(elem){
     var maximos = {
-      formas: r.db('tp2').table("Competidor").max("formas")("formas"),
-      salto: r.db('tp2').table("Competidor").max("salto")("salto"),
-      rotura: r.db('tp2').table("Competidor").max("rotura")("rotura"),
-      combate: r.db('tp2').table("Competidor").max("combate")("combate")
+      formas: r.db('tp2').table("Competidor").max("numMedallasFormas")("numMedallasFormas"),
+      salto: r.db('tp2').table("Competidor").max("numMedallasSalto")("numMedallasSalto"),
+      rotura: r.db('tp2').table("Competidor").max("numMedallasRotura")("numMedallasRotura"),
+      combate: r.db('tp2').table("Competidor").max("numMedallasCombate")("numMedallasCombate")
       };
     
-    return elem("salto").eq(maximos["salto"]).or(
-           elem("formas").eq(maximos["formas"]),
-           elem("combate").eq(maximos["combate"]),
-           elem("rotura").eq(maximos["rotura"]))
+    return elem("numMedallasSalto").eq(maximos["salto"]).or(
+           elem("numMedallasFormas").eq(maximos["formas"]),
+           elem("numMedallasCombate").eq(maximos["combate"]),
+           elem("numMedallasRotura").eq(maximos["rotura"]))
 }).group(
   function(elem){
     var maximos = {
-      formas: r.db('tp2').table("Competidor").max("formas")("formas"),
-      salto: r.db('tp2').table("Competidor").max("salto")("salto"),
-      rotura: r.db('tp2').table("Competidor").max("rotura")("rotura"),
-      combate: r.db('tp2').table("Competidor").max("combate")("combate")
+      formas: r.db('tp2').table("Competidor").max("numMedallasFormas")("numMedallasFormas"),
+      salto: r.db('tp2').table("Competidor").max("numMedallasSalto")("numMedallasSalto"),
+      rotura: r.db('tp2').table("Competidor").max("numMedallasRotura")("numMedallasRotura"),
+      combate: r.db('tp2').table("Competidor").max("numMedallasCombate")("numMedallasCombate")
       };
     
-    return elem("salto").eq(maximos["salto"]).branch(["salto"],[]).add(
-           elem("formas").eq(maximos["formas"]).branch(["formas"],[])).add(
-           elem("combate").eq(maximos["combate"]).branch(["combate"],[])).add(
-           elem("rotura").eq(maximos["rotura"]).branch(["rotura"],[]))
+    return elem("numMedallasSalto").eq(maximos["salto"]).branch(["salto"],[]).add(
+           elem("numMedallasFormas").eq(maximos["formas"]).branch(["formas"],[])).add(
+           elem("numMedallasCombate").eq(maximos["combate"]).branch(["combate"],[])).add(
+           elem("numMedallasRotura").eq(maximos["rotura"]).branch(["rotura"],[]))
     
   }, {multi: true})
 
